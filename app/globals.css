@@ -443,3 +443,9 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover {
 
 
 
+.actabtn{ font-size: 18px; font-weight: 700; }@media (min-width: 900px){ .actabtn{ font-size: 20px; } }
+
+
+.actabtn{ font-size: 18px; font-weight: 700; }
+@media (min-width: 900px){ .actabtn{ font-size: 20px; } }
+
