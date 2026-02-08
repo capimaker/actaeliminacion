@@ -449,9 +449,10 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover {
 
 .actabtn{ font-size: 16px; font-weight: 700; }
 @media (min-width: 900px){ .actabtn{ font-size: 18px; } }
-.h1Hero{ font-size: 22px; }
-@media (min-width: 520px){ .h1Hero{ font-size: 26px; } }
-@media (min-width: 900px){ .h1Hero{ font-size: 28px; } }
+.h1Hero{ font-size: 21px; }
+@media (min-width: 520px){ .h1Hero{ font-size: 25px; } }
+@media (min-width: 900px){ .h1Hero{ font-size: 27px; } }
+
 
 
 
