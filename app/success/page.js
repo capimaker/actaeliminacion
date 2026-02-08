@@ -30,7 +30,7 @@ function SuccessInner() {
       <div className="topbar">
         <div className="brand" role="button" onClick={() => router.push("/")}>
           
-          <span className="actabtn">Acta de Eliminación Simbólica</span>
+          <span className="actabtn">ACTA DE ELIMINACIÓN SIMBÓLICA</span>
         </div>
         <div className="pills">
           <div className="pill">Pago verificado</div>

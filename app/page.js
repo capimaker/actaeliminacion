@@ -9,7 +9,7 @@ export default function Home() {
       <div className="topbar">
         <div className="brand">
           <span />
-          <span>Acta de Eliminación Simbólica</span>
+          <span className="actabtn">ACTA DE ELIMINACIÓN SIMBÓLICA</span>
         </div>
         <div className="pills">
           <div className="pill">Sin cuenta</div>
