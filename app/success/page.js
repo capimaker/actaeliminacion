@@ -29,7 +29,7 @@ function SuccessInner() {
     <div className="container">
       <div className="topbar">
         <div className="brand" role="button" onClick={() => router.push("/")}>
-          <Image className="brandLogo" src="/logo_transparent.png" alt="Logo Acta de Eliminación" width={28} height={28} priority />
+          
           <span>Acta de Eliminación</span>
         </div>
         <div className="pills">

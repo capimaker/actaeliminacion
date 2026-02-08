@@ -1,8 +1,11 @@
 export const runtime = "nodejs";
+
 import { NextResponse } from "next/server";
 import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 import crypto from "crypto";
 import Stripe from "stripe";
+import fs from "fs";
+import path from "path";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -66,7 +69,6 @@ function formatHumanDate(localISO, timeZone) {
 
 /* ---------------- PDF helpers ---------------- */
 
-
 const A4 = { w: 595, h: 842 };
 
 function drawFrame(page, margin) {
@@ -125,50 +127,62 @@ function wrapTextPreserveNewlines({ text, font, fontSize, maxWidth }) {
   return out;
 }
 
-function newPage(pdfDoc, fonts, title, subtitle, pageNumber) {
+function newPage(pdfDoc, fonts, title, subtitle, pageNumber, logoImage) {
   const page = pdfDoc.addPage([A4.w, A4.h]);
   const margin = 40;
 
+  // Fondo pergamino
   page.drawRectangle({
-  x: 0,
-  y: 0,
-  width: A4.w,
-  height: A4.h,
-  color: rgb(0.96, 0.93, 0.86),
-});
+    x: 0,
+    y: 0,
+    width: A4.w,
+    height: A4.h,
+    color: rgb(0.96, 0.93, 0.86),
+  });
 
   drawFrame(page, margin);
 
-  // Header (ASCII only)
-drawCenteredText(
-  page,
-  "ACTA DE ELIMINACION",
-  A4.h - margin - 60,
-  fonts.bold,
-  22,
-  A4.w
-);
+  // Logo centrado superior (sello)
+  if (logoImage) {
+    const logoSize = 90;
+    const logoY = A4.h - margin - 120;
 
+    page.drawImage(logoImage, {
+      x: (A4.w - logoSize) / 2,
+      y: logoY,
+      width: logoSize,
+      height: logoSize,
+      opacity: 0.95,
+    });
+  }
 
+  // Header
+  drawCenteredText(
+    page,
+    "ACTA DE ELIMINACION",
+    A4.h - margin - 160,
+    fonts.bold,
+    22,
+    A4.w
+  );
 
-drawCenteredText(
-  page,
-  title,
-  A4.h - margin - 95,
-  fonts.bold,
-  13,
-  A4.w
-);
+  drawCenteredText(
+    page,
+    title,
+    A4.h - margin - 195,
+    fonts.bold,
+    13,
+    A4.w
+  );
 
-drawCenteredText(
-  page,
-  subtitle,
-  A4.h - margin - 120,
-  fonts.regular,
-  10,
-  A4.w
-);
-
+  drawCenteredText(
+    page,
+    subtitle,
+    A4.h - margin - 220,
+    fonts.regular,
+    10,
+    A4.w
+  );
 
   // Footer
   page.drawText(`- ${pageNumber} -`, {
@@ -178,17 +192,16 @@ drawCenteredText(
     font: fonts.regular,
   });
 
- const columnWidth = 360;
-const columnX = (A4.w - columnWidth) / 2;
+  const columnWidth = 360;
+  const columnX = (A4.w - columnWidth) / 2;
 
-return {
-  page,
-  x: columnX,
-  y: A4.h - margin - 160,
-  maxWidth: columnWidth,
-  bottom: margin + 40,
-};
-
+  return {
+    page,
+    x: columnX,
+    y: A4.h - margin - 260, // bajado para dejar aire bajo el header/logo
+    maxWidth: columnWidth,
+    bottom: margin + 40,
+  };
 }
 
 /* ---------------- Route ---------------- */
@@ -204,10 +217,7 @@ export async function GET(req) {
     );
   }
   if (!stripeKey) {
-    return NextResponse.json(
-      { error: "Missing STRIPE_SECRET_KEY" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Missing STRIPE_SECRET_KEY" }, { status: 500 });
   }
 
   const { searchParams } = new URL(req.url);
@@ -216,8 +226,9 @@ export async function GET(req) {
   const isPreview = searchParams.get("preview") === "1";
 
   if (!token) return NextResponse.json({ error: "token required" }, { status: 400 });
-  if (!sessionId)
+  if (!sessionId) {
     return NextResponse.json({ error: "session_id required" }, { status: 400 });
+  }
 
   // 1) Verify Stripe payment
   let session;
@@ -258,17 +269,27 @@ export async function GET(req) {
     bold: await pdfDoc.embedFont(StandardFonts.HelveticaBold),
   };
 
+  // Cargar logo una sola vez
+  let logoImage = null;
+  try {
+    const logoPath = path.join(process.cwd(), "public", "logo_transparent.png");
+    const logoBytes = fs.readFileSync(logoPath);
+    logoImage = await pdfDoc.embedPng(logoBytes);
+  } catch {
+    logoImage = null; // si no existe, simplemente no se dibuja
+  }
+
   const fontSize = 11;
   const lineHeight = 16;
 
   let pageNumber = 1;
-  let ctx = newPage(pdfDoc, fonts, title, subtitle, pageNumber);
+  let ctx = newPage(pdfDoc, fonts, title, subtitle, pageNumber, logoImage);
   let y = ctx.y;
 
   const ensureSpace = (needed) => {
     if (y < ctx.bottom + needed) {
       pageNumber++;
-      ctx = newPage(pdfDoc, fonts, title, subtitle, pageNumber);
+      ctx = newPage(pdfDoc, fonts, title, subtitle, pageNumber, logoImage);
       y = ctx.y;
     }
   };
@@ -342,7 +363,7 @@ export async function GET(req) {
   y -= 18;
 
   ensureSpace(24);
-  ctx.page.drawText("Estado: CERRADO ", {
+  ctx.page.drawText("Estado: CERRADO", {
     x: ctx.x,
     y,
     size: 10,
@@ -353,8 +374,7 @@ export async function GET(req) {
   section("Clausura");
   writeLines(
     wrapTextPreserveNewlines({
-      text:
-        "Con este acto, la etapa descrita queda simbolicamente cerrada" ,
+      text: "Con este acto, la etapa descrita queda simbolicamente cerrada.",
       font: fonts.regular,
       fontSize,
       maxWidth: ctx.maxWidth,
