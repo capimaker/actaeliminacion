@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -9,7 +8,7 @@ export default function Home() {
     <div className="container">
       <div className="topbar">
         <div className="brand">
-          <Image className="brandLogo" src="/logo_transparent.png" alt="Logo Acta de Eliminación" width={28} height={28} priority />
+          <span className="brandMark" />
           <span>Acta de Eliminación Simbólica</span>
         </div>
         <div className="pills">
@@ -88,6 +87,4 @@ export default function Home() {
     </div>
   );
 }
-
-
 
