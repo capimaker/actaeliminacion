@@ -92,7 +92,7 @@ function FormInner() {
             </div>
 
             <h1 className="h1 h1Hero">
-              Escribe el cierre
+              Escribe la Declaración de Cierre
             </h1>
             <p className="sub">
               Tras pagar podrás previsualizar y descargar el PDF inmediatamente.

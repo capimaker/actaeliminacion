@@ -31,7 +31,7 @@ export default function Home() {
               Cierra una etapa con un acto simple.
             </h1>
             <p className="sub subNarrow">
-              Si deseas cerrar una etapa, una vivencia o una experiencia, este es un procedimiento para hacerlo.
+              Si deseas cerrar una etapa, una vivencia o una experiencia, este es un procedimiento SIMBÓLICO para hacerlo.
             </p>
 
            <div className="actions ctaGlow actionsHero">

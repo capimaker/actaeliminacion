@@ -342,7 +342,7 @@ export async function GET(req) {
   y -= 18;
 
   ensureSpace(24);
-  ctx.page.drawText("Estado: ELIMINADO ", {
+  ctx.page.drawText("Estado: CERRADO ", {
     x: ctx.x,
     y,
     size: 10,
