@@ -447,10 +447,12 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover {
 
 
 
-.actabtn{ font-size: 18px; font-weight: 700; }
-@media (min-width: 900px){ .actabtn{ font-size: 20px; } }
-.h1Hero{ font-size: 24px; }
-@media (min-width: 520px){ .h1Hero{ font-size: 28px; } }
-@media (min-width: 900px){ .h1Hero{ font-size: 30px; } }
+.actabtn{ font-size: 16px; font-weight: 700; }
+@media (min-width: 900px){ .actabtn{ font-size: 18px; } }
+.h1Hero{ font-size: 22px; }
+@media (min-width: 520px){ .h1Hero{ font-size: 26px; } }
+@media (min-width: 900px){ .h1Hero{ font-size: 28px; } }
+
+
 
 
