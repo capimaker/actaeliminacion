@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { Suspense, useMemo, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
@@ -72,7 +72,7 @@ function FormInner() {
     <div className="container">
       <div className="topbar formTopbar">
         <div className="brand" role="button" onClick={() => router.push("/")}>
-          <span className="brandMark" />
+          <Image className="brandLogo" src="/logo_transparent.png" alt="Logo Acta de Eliminación" width={28} height={28} priority />
           <span className="actabtn">Acta de Eliminación Simbólica</span>
         </div>
         <div className="pills">
@@ -203,7 +203,7 @@ export default function FormPage() {
         <div className="container">
           <div className="topbar formTopbar">
             <div className="brand">
-              <span className="brandMark" />
+              <Image className="brandLogo" src="/logo_transparent.png" alt="Logo Acta de Eliminación" width={28} height={28} priority />
               <span>Acta de Eliminación</span>
             </div>
             <div className="pills">
@@ -222,6 +222,8 @@ export default function FormPage() {
     </Suspense>
   );
 }
+
+
 
 
 

@@ -1,5 +1,5 @@
 "use client";
-
+import Image from "next/image";
 import { Suspense, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
@@ -29,7 +29,7 @@ function SuccessInner() {
     <div className="container">
       <div className="topbar">
         <div className="brand" role="button" onClick={() => router.push("/")}>
-          <span className="brandMark" />
+          <Image className="brandLogo" src="/logo_transparent.png" alt="Logo Acta de Eliminación" width={28} height={28} priority />
           <span>Acta de Eliminación</span>
         </div>
         <div className="pills">
@@ -99,7 +99,7 @@ export default function SuccessPage() {
         <div className="container">
           <div className="topbar">
             <div className="brand">
-              <span className="brandMark" />
+              <Image className="brandLogo" src="/logo_transparent.png" alt="Logo Acta de Eliminación" width={28} height={28} priority />
               <span>Acta de Eliminación</span>
             </div>
             <div className="pills">
@@ -119,4 +119,6 @@ export default function SuccessPage() {
     </Suspense>
   );
 }
+
+
 
