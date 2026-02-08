@@ -1,0 +1,220 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+
+export default function FormPage() {
+  const router = useRouter();
+  const sp = useSearchParams();
+  const canceled = sp.get("canceled") === "1";
+
+  const [title, setTitle] = useState("");
+  const [statement, setStatement] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const timeZone = useMemo(
+    () => Intl.DateTimeFormat().resolvedOptions().timeZone,
+    []
+  );
+
+  const scheduledAtLocal = date && time ? `${date}T${time}` : "";
+  const canSubmit =
+    title.trim() &&
+    statement.trim() &&
+    fullName.trim() &&
+    scheduledAtLocal;
+
+  async function onFinish() {
+    if (!canSubmit) return;
+
+    setLoading(true);
+    try {
+      const resToken = await fetch("/api/issue-token", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title,
+          statement,
+          fullName,
+          scheduledAtLocal,
+          timeZone,
+        }),
+      });
+
+      const dataToken = await resToken.json().catch(() => null);
+      if (!resToken.ok) {
+        alert(dataToken?.error ?? "Error preparando el documento");
+        return;
+      }
+
+      const resCheckout = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: dataToken.token }),
+      });
+
+      const dataCheckout = await resCheckout.json().catch(() => null);
+      if (!resCheckout.ok) {
+        alert(dataCheckout?.error ?? "Error iniciando el pago");
+        return;
+      }
+
+      window.location.href = dataCheckout.url;
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="container">
+      <div className="topbar">
+        <div className="brand" role="button" onClick={() => router.push("/")}>
+          <span className="brandMark" />
+          <span className="actabtn">Acta de Eliminación</span>
+        </div>
+        <div className="pills">
+          <div className="pill">Precio: <b style={{ color:"rgba(255,255,255,.9)" }}>9 €</b></div>
+          <div className="pill">Zona: {timeZone}</div>
+        </div>
+      </div>
+
+      <div className="hero">
+        <div className="card">
+          <div className="cardPad">
+            <div className="kicker">
+              <span className="kickerDot" />
+              Formulario • Paso 1 de 3
+            </div>
+
+            <h1 className="h1" style={{ fontSize: 34, marginTop: 12 }}>
+              Escribe el cierre
+            </h1>
+            <p className="sub">
+              Tras pagar podrás previsualizar y descargar el PDF inmediatamente.
+            </p>
+
+            {canceled && (
+              <div className="notice noticeDanger">
+                El pago fue cancelado. Puedes intentarlo de nuevo cuando quieras.
+              </div>
+            )}
+
+            <div className="notice">
+              <b>Importante:</b> este documento <b>no se guarda</b>. Descárgalo al finalizar.
+            </div>
+
+            <div className="steps">
+              <div className="step stepActive">1) Formulario</div>
+              <div className="step">2) Pago</div>
+              <div className="step">3) PDF</div>
+            </div>
+
+            <label className="label">Título</label>
+            <input
+              className="input"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Ej: Cierro este ciclo"
+            />
+
+            <label className="label">Declaración</label>
+            <textarea
+              className="textarea"
+              value={statement}
+              onChange={(e) => setStatement(e.target.value)}
+              placeholder="Escribe tu declaración aquí…"
+            />
+
+            <label className="label">Firma (nombre y apellidos)</label>
+            <input
+              className="input"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Ej: María José"
+            />
+
+            <div className="grid2" style={{ marginTop: 8 }}>
+              <div>
+                <label className="label">Fecha</label>
+                <input
+                  className="input"
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="label">Hora</label>
+                <input
+                  className="input"
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="actions">
+              <button
+                className="btn btnPrimary"
+                onClick={onFinish}
+                disabled={!canSubmit || loading}
+              >
+                {loading ? "Abriendo pago…" : "Generar acta"}
+              </button>
+              <button
+                className="btn btnGhost"
+                onClick={() => {
+                  setTitle("");
+                  setStatement("");
+                  setFullName("");
+                  setDate("");
+                  setTime("");
+                }}
+                disabled={loading}
+              >
+                Limpiar
+              </button>
+            </div>
+
+            {!canSubmit && (
+              <p className="sub" style={{ marginTop: 10 }}>
+                Completa título, declaración, firma y fecha/hora para continuar.
+              </p>
+            )}
+          </div>
+        </div>
+
+        <div className="card">
+          <div className="cardPad">
+            <p className="miniTitle">Resumen</p>
+            <div className="kv">
+              <div className="kvRow"><b>Título</b></div>
+              <div className="kvRow">{title || "—"}</div>
+
+              <div className="kvRow"><b>Firma</b></div>
+              <div className="kvRow">{fullName || "—"}</div>
+
+              <div className="kvRow"><b>Fecha/hora</b></div>
+              <div className="kvRow">{scheduledAtLocal || "—"}</div>
+
+              <div className="kvRow"><b>Zona</b></div>
+              <div className="kvRow">{timeZone}</div>
+            </div>
+
+            <hr className="hr" />
+
+            <p className="miniTitle">Consejo</p>
+            <p className="sub">
+              Escribe una frase que te creas de verdad. Corta, firme y sin negociación.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
