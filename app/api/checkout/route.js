@@ -30,7 +30,7 @@ export async function POST(req) {
           price_data: {
             currency: "eur",
             product_data: { name: "Acta de Eliminación" },
-            unit_amount: 900, // 9,00 €
+            unit_amount: 1000, // 10,00 €
           },
           quantity: 1,
         },

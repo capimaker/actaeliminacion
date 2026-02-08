@@ -18,7 +18,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="hero" style={{ marginTop: 60 }}>
+      <div className="hero heroSpacious">
 
         <div className="card" >
           <div className="cardPad">
@@ -27,15 +27,14 @@ export default function Home() {
               Ritual simbólico • Documento descargable
             </div>
 
-            <h1 className="h1" style={{ marginTop: 18, marginBottom: 18 }}>
+            <h1 className="h1 h1Hero">
               Cierra una etapa con un acto simple.
             </h1>
-            <p className="sub" style={{ maxWidth: 520 }}>
-              Escribes una declaración, eliges el momento y generas un PDF listo para
-              descargar tras el pago. Tu contenido no se guarda.
+            <p className="sub subNarrow">
+              Si deseas cerrar una etapa, una vivencia o una experiencia, este es un procedimiento para hacerlo.
             </p>
 
-           <div className="actions ctaGlow" style={{ marginTop: 40 }}>
+           <div className="actions ctaGlow actionsHero">
   <button
     className="btn btnPrimary"
     style={{ padding: "16px 26px", fontSize: 16 }}
@@ -54,33 +53,33 @@ export default function Home() {
             </div>
 
             <div className="notice">
-              <b>Privacidad:</b> el documento no se almacena. Descárgalo al finalizar.
+              <b>Privacidad:</b> el documento no se guarda. Descárgalo al finalizar.
             </div>
           </div>
         </div>
 
         <div className="card" >
-          <div className="cardPad" style={{ height: 24 }} >
+          <div className="cardPad">
             <p className="miniTitle">Cómo funciona</p>
             <div className="kv">
-              <div className="kvRow"><b>Escribes</b></div>
+              <div className="kvRow"><b>Escribe</b></div>
               <div className="kvRow">Declaración + firma.</div>
 
-              <div className="kvRow"><b>Confirmas</b></div>
+              <div className="kvRow"><b>Confirma</b></div>
               <div className="kvRow">Fecha y hora (tu zona).</div>
 
-              <div className="kvRow"><b>Pagas</b></div>
-              <div className="kvRow">9 € con Stripe.</div>
+              <div className="kvRow"><b>Paga</b></div>
+              <div className="kvRow">10 € con Stripe.</div>
 
-              <div className="kvRow"><b>Recibes</b></div>
+              <div className="kvRow"><b>Recibe</b></div>
               <div className="kvRow">Previsualización + descarga PDF.</div>
             </div>
 
             <hr className="hr" />
 
-            <p className="miniTitle">Nota</p>
+            <p className="miniTitle">Nota importante:</p>
             <p className="sub">
-              Piensa en esto como un “punto final” escrito. Sin explicación. Solo decisión.
+              No sustituye procesos terapéuticos.
             </p>
           </div>
         </div>
@@ -88,3 +87,4 @@ export default function Home() {
     </div>
   );
 }
+

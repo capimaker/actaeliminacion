@@ -45,7 +45,7 @@ function SuccessInner() {
             Éxito • Paso 3 de 3
           </div>
 
-          <h1 className="h1" style={{ fontSize: 34, marginTop: 12 }}>
+          <h1 className="h1 h1Hero">
             Tu acta está preparada.
           </h1>
           <p className="sub">
@@ -119,3 +119,4 @@ export default function SuccessPage() {
     </Suspense>
   );
 }
+

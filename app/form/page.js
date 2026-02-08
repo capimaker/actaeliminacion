@@ -70,20 +70,20 @@ function FormInner() {
 
   return (
     <div className="container">
-      <div className="topbar">
+      <div className="topbar formTopbar">
         <div className="brand" role="button" onClick={() => router.push("/")}>
           <span className="brandMark" />
-          <span>Acta de Eliminación</span>
+          <span className="actabtn">Acta de Eliminación</span>
         </div>
         <div className="pills">
           <div className="pill">
-            Precio: <b style={{ color: "rgba(255,255,255,.9)" }}>9 €</b>
+            Precio: <b>10 €</b>
           </div>
           <div className="pill">Zona: {timeZone}</div>
         </div>
       </div>
 
-      <div className="hero">
+      <div className="hero heroForm">
         <div className="card">
           <div className="cardPad">
             <div className="kicker">
@@ -91,7 +91,7 @@ function FormInner() {
               Formulario • Paso 1 de 3
             </div>
 
-            <h1 className="h1" style={{ fontSize: 34, marginTop: 12 }}>
+            <h1 className="h1 h1Hero">
               Escribe el cierre
             </h1>
             <p className="sub">
@@ -186,44 +186,9 @@ function FormInner() {
 
             {!canSubmit && (
               <p className="sub" style={{ marginTop: 10 }}>
-                Completa título, declaración, firma y fecha/hora para continuar.
+                Nota: El importe corresponde exclusivamente al acto formal y emisión del documento.
               </p>
             )}
-          </div>
-        </div>
-
-        <div className="card">
-          <div className="cardPad">
-            <p className="miniTitle">Resumen</p>
-            <div className="kv">
-              <div className="kvRow">
-                <b>Título</b>
-              </div>
-              <div className="kvRow">{title || "—"}</div>
-
-              <div className="kvRow">
-                <b>Firma</b>
-              </div>
-              <div className="kvRow">{fullName || "—"}</div>
-
-              <div className="kvRow">
-                <b>Fecha/hora</b>
-              </div>
-              <div className="kvRow">{scheduledAtLocal || "—"}</div>
-
-              <div className="kvRow">
-                <b>Zona</b>
-              </div>
-              <div className="kvRow">{timeZone}</div>
-            </div>
-
-            <hr className="hr" />
-
-            <p className="miniTitle">Tip</p>
-            <p className="sub">
-              Escribe una frase que te creas de verdad. Corta, firme y sin
-              negociación.
-            </p>
           </div>
         </div>
       </div>
@@ -236,7 +201,7 @@ export default function FormPage() {
     <Suspense
       fallback={
         <div className="container">
-          <div className="topbar">
+          <div className="topbar formTopbar">
             <div className="brand">
               <span className="brandMark" />
               <span>Acta de Eliminación</span>
@@ -257,3 +222,7 @@ export default function FormPage() {
     </Suspense>
   );
 }
+
+
+
+

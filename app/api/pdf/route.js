@@ -354,8 +354,7 @@ export async function GET(req) {
   writeLines(
     wrapTextPreserveNewlines({
       text:
-        "Con este acto, la etapa descrita queda simbolicamente cerrada y liberada.\n" +
-        "Lo que fue, queda en su lugar. Lo que viene, queda abierto.",
+        "Con este acto, la etapa descrita queda simbolicamente cerrada y liberada.\n" ,
       font: fonts.regular,
       fontSize,
       maxWidth: ctx.maxWidth,

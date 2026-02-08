@@ -5,6 +5,11 @@ export const metadata = {
   description: "Un cierre simbólico en forma de acta descargable en PDF.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
