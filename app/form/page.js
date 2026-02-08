@@ -1,10 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
+import { Suspense, useMemo, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 
-export default function FormPage() {
+function FormInner() {
   const router = useRouter();
   const sp = useSearchParams();
   const canceled = sp.get("canceled") === "1";
@@ -74,10 +73,12 @@ export default function FormPage() {
       <div className="topbar">
         <div className="brand" role="button" onClick={() => router.push("/")}>
           <span className="brandMark" />
-          <span className="actabtn">Acta de Eliminación</span>
+          <span>Acta de Eliminación</span>
         </div>
         <div className="pills">
-          <div className="pill">Precio: <b style={{ color:"rgba(255,255,255,.9)" }}>9 €</b></div>
+          <div className="pill">
+            Precio: <b style={{ color: "rgba(255,255,255,.9)" }}>9 €</b>
+          </div>
           <div className="pill">Zona: {timeZone}</div>
         </div>
       </div>
@@ -104,7 +105,8 @@ export default function FormPage() {
             )}
 
             <div className="notice">
-              <b>Importante:</b> este documento <b>no se guarda</b>. Descárgalo al finalizar.
+              <b>Importante:</b> este documento <b>no se guarda</b>. Descárgalo al
+              finalizar.
             </div>
 
             <div className="steps">
@@ -134,7 +136,7 @@ export default function FormPage() {
               className="input"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              placeholder="Ej: María José"
+              placeholder="Ej: María Pérez"
             />
 
             <div className="grid2" style={{ marginTop: 8 }}>
@@ -164,8 +166,9 @@ export default function FormPage() {
                 onClick={onFinish}
                 disabled={!canSubmit || loading}
               >
-                {loading ? "Abriendo pago…" : "Generar acta"}
+                {loading ? "Abriendo pago…" : "Generar mi acta"}
               </button>
+
               <button
                 className="btn btnGhost"
                 onClick={() => {
@@ -193,28 +196,64 @@ export default function FormPage() {
           <div className="cardPad">
             <p className="miniTitle">Resumen</p>
             <div className="kv">
-              <div className="kvRow"><b>Título</b></div>
+              <div className="kvRow">
+                <b>Título</b>
+              </div>
               <div className="kvRow">{title || "—"}</div>
 
-              <div className="kvRow"><b>Firma</b></div>
+              <div className="kvRow">
+                <b>Firma</b>
+              </div>
               <div className="kvRow">{fullName || "—"}</div>
 
-              <div className="kvRow"><b>Fecha/hora</b></div>
+              <div className="kvRow">
+                <b>Fecha/hora</b>
+              </div>
               <div className="kvRow">{scheduledAtLocal || "—"}</div>
 
-              <div className="kvRow"><b>Zona</b></div>
+              <div className="kvRow">
+                <b>Zona</b>
+              </div>
               <div className="kvRow">{timeZone}</div>
             </div>
 
             <hr className="hr" />
 
-            <p className="miniTitle">Consejo</p>
+            <p className="miniTitle">Tip</p>
             <p className="sub">
-              Escribe una frase que te creas de verdad. Corta, firme y sin negociación.
+              Escribe una frase que te creas de verdad. Corta, firme y sin
+              negociación.
             </p>
           </div>
         </div>
       </div>
     </div>
+  );
+}
+
+export default function FormPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container">
+          <div className="topbar">
+            <div className="brand">
+              <span className="brandMark" />
+              <span>Acta de Eliminación</span>
+            </div>
+            <div className="pills">
+              <div className="pill">Cargando…</div>
+            </div>
+          </div>
+          <div className="card" style={{ marginTop: 18 }}>
+            <div className="cardPad">
+              <p className="sub">Preparando el formulario…</p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <FormInner />
+    </Suspense>
   );
 }

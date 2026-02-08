@@ -1,9 +1,9 @@
 "use client";
 
-import { useMemo } from "react";
+import { Suspense, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 
-export default function SuccessPage() {
+function SuccessInner() {
   const sp = useSearchParams();
   const router = useRouter();
 
@@ -49,11 +49,12 @@ export default function SuccessPage() {
             Tu acta está preparada.
           </h1>
           <p className="sub">
-            Previsualízala aquí y descárgala. Tu documento no se almacena.
+            Previsualízala aquí y descárgala. El documento no se almacena.
           </p>
 
           <div className="notice">
-            <b>Importante:</b> descárgalo ahora. Si cierras esta página, no garantizamos poder regenerarlo.
+            <b>Importante:</b> descárgalo ahora. Si cierras esta página, no podremos
+            regenerarlo.
           </div>
 
           <div className="actions">
@@ -76,13 +77,45 @@ export default function SuccessPage() {
           <p className="miniTitle">Previsualización</p>
           {!ready ? (
             <div className="notice noticeDanger">
-              Falta información de la sesión. Vuelve al formulario e inténtalo de nuevo.
+              Falta información de la sesión. Vuelve al formulario.
             </div>
           ) : (
-            <iframe className="iframe" src={previewSrc} title="Previsualización PDF" />
+            <iframe
+              className="iframe"
+              src={previewSrc}
+              title="Previsualización PDF"
+            />
           )}
         </div>
       </div>
     </div>
+  );
+}
+
+export default function SuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="container">
+          <div className="topbar">
+            <div className="brand">
+              <span className="brandMark" />
+              <span>Acta de Eliminación</span>
+            </div>
+            <div className="pills">
+              <div className="pill">Cargando…</div>
+            </div>
+          </div>
+
+          <div className="card" style={{ marginTop: 18 }}>
+            <div className="cardPad">
+              <p className="sub">Preparando el documento…</p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <SuccessInner />
+    </Suspense>
   );
 }
