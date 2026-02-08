@@ -1,6 +1,6 @@
+export const runtime = "nodejs";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
-export const runtime = "nodejs";
 
 
 function safeText(input, maxLen = 2000) {
