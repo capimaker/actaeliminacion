@@ -8,7 +8,7 @@ export default function Home() {
     <div className="container">
       <div className="topbar">
         <div className="brand">
-          <span className="brandMark" />
+          <span />
           <span>Acta de Eliminación Simbólica</span>
         </div>
         <div className="pills">
@@ -27,7 +27,7 @@ export default function Home() {
               Ritual simbólico • Documento descargable
             </div>
 
-            <h1 className="h1 h1Hero">
+            <h1 className="h1 h1Hero h1Home">
               Cierra una etapa con un acto simple.
             </h1>
             <p className="sub subNarrow">
@@ -87,4 +87,5 @@ export default function Home() {
     </div>
   );
 }
+
 

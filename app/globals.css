@@ -434,3 +434,12 @@ input[type="time"]::-webkit-calendar-picker-indicator:hover {
 
 
 
+
+
+.h1Home{ font-size: 18px; }
+@media (min-width: 520px){ .h1Home{ font-size: 22px; } }
+@media (min-width: 900px){ .h1Home{ font-size: 24px; } }
+
+
+
+
