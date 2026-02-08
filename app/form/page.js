@@ -73,7 +73,7 @@ function FormInner() {
       <div className="topbar formTopbar">
         <div className="brand" role="button" onClick={() => router.push("/")}>
           <span className="brandMark" />
-          <span className="actabtn">Acta de Eliminación</span>
+          <span className="actabtn">Acta de Eliminación Simbólica</span>
         </div>
         <div className="pills">
           <div className="pill">
