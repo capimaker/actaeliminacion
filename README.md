@@ -1,37 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Acta de Eliminación
 
-## Getting Started
+Aplicación web para generar un “Acta de Eliminación Simbólica” en PDF. El usuario completa un formulario, realiza el pago con Stripe y obtiene una previsualización y descarga inmediata del documento. El sistema no almacena el contenido.
 
-First, run the development server:
+**Qué hace**
+- Landing con explicación del ritual y CTA.
+- Formulario con título, declaración, firma, fecha y hora.
+- Checkout de Stripe (10 €) y verificación de pago.
+- Generación de PDF en tiempo real con `pdf-lib`.
+- Previsualización y descarga del PDF sin persistencia.
 
+**Flujo**
+1. El usuario completa el formulario en `/form`.
+2. Se emite un token firmado (válido 30 min).
+3. Se crea una sesión de Stripe Checkout.
+4. Stripe redirige a `/success`.
+5. Se verifica el pago y se genera el PDF.
+
+**Rutas de la app**
+- `/` Landing.
+- `/form` Formulario y disparo de pago.
+- `/success` Previsualización y descarga.
+
+**API**
+- `POST /api/issue-token` Emite token firmado con los datos del formulario.
+- `POST /api/checkout` Crea sesión de Stripe Checkout.
+- `GET /api/pdf` Verifica pago + token y devuelve el PDF (preview o descarga).
+
+**Variables de entorno**
+- `ACTA_TOKEN_SECRET` Secreto para firmar el token del formulario.
+- `STRIPE_SECRET_KEY` Clave secreta de Stripe.
+- `APP_URL` Base URL opcional si no hay headers de host (útil fuera de Vercel).
+
+**Requisitos**
+- Node.js `>= 18.18.0`
+
+**Cómo ejecutar**
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+**Build y producción**
+```bash
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-# actaeliminacion
+**Notas**
+- El precio está fijado a 10 € en `app/api/checkout/route.js`.
+- Los tokens expiran a los 30 minutos.
+- El PDF usa el logo `public/logo_transparent.png`.
+- Los scripts usan `--webpack` para evitar Turbopack.
