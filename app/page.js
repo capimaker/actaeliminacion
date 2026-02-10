@@ -44,9 +44,9 @@ export default function Home() {
   </button>
    <button
     className="btn btnPrimary" style={{ padding: "16px 26px", fontSize: 16 }}
-    onClick={() => router.push("/contact")}
+    onClick={() => router.push("/contacto")}
   >
-    Soporte
+    Contacto
   </button>
 </div>
 
